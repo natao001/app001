@@ -1,1 +1,1 @@
-web: gunicorn Ws:app --log-file=-
+web: gunicorn Ws:app --log-file=-clear
