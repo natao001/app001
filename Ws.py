@@ -26,7 +26,7 @@ def login():
 
             password_form  = request.form['password']
             cur.execute("SELECT senha FROM usuario WHERE nome = {};"
-                        .format(username_form))
+                        .format(password_form))
 
             for row in cur.fetchall():
                 if md5(password_form).hexdigest() == row[0]:
@@ -37,7 +37,7 @@ def login():
     except ServerError as e:
         error = str(e)
 
-    return render_template('login.html', error=error)
+    return 'logado'
 
 
 
