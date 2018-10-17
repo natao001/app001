@@ -35,7 +35,7 @@ def login():
 @app.route('/contacts')
 def contacts():
     try:
-        cur.execute("""SELECT senha from usuario""")
+        cur.execute("""SELECT nome from usuario""")
         rows = cur.fetchall()
         response = ''
         my_list = []
