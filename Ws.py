@@ -17,9 +17,9 @@ def login():
     if request.method == 'POST':
         username_form  = request.form['nome']
         password_form  = request.form['senha']
-        cur.execute("SELECT COUNT(1) FROM users WHERE nome = %s;", [username_form]) # CHECKS IF USERNAME EXSIST
+        cur.execute("SELECT COUNT(1) FROM usuario WHERE nome = %s;", [username_form]) # CHECKS IF USERNAME EXSIST
         if cur.fetchone()[0]:
-            cur.execute("SELECT senha FROM users WHERE name = %s;", [username_form]) # FETCH THE HASHED PASSWORD
+            cur.execute("SELECT senha FROM usuario WHERE nome = %s;", [username_form]) # FETCH THE HASHED PASSWORD
             for row in cur.fetchall():
                 if md5(password_form).hexdigest() == row[0]:
                     session['nome'] = request.form['nome']
