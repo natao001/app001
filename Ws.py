@@ -11,34 +11,24 @@ def hello():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if 'username' in session:
-        return redirect(url_for('index'))
-
     error = None
-    try:
-        if request.method == 'POST':
-            username_form  = request.form['username']
-            cur.execute("SELECT COUNT(1) FROM usuario WHERE nome = {};"
-                        .format(username_form))
-
-            if not cur.fetchone()[0]:
-                raise ServerError('Invalid username')
-
-            password_form  = request.form['password']
-            cur.execute("SELECT senha FROM usuario WHERE nome = {};"
-                        .format(password_form))
-
+    if 'nome' in session:
+        return 'logado'
+    if request.method == 'POST':
+        username_form  = request.form['nome']
+        password_form  = request.form['senha']
+        cur.execute("SELECT COUNT(1) FROM users WHERE nome = %s;", [username_form]) # CHECKS IF USERNAME EXSIST
+        if cur.fetchone()[0]:
+            cur.execute("SELECT senha FROM users WHERE name = %s;", [username_form]) # FETCH THE HASHED PASSWORD
             for row in cur.fetchall():
                 if md5(password_form).hexdigest() == row[0]:
-                    session['username'] = request.form['username']
-                    return redirect(url_for('index'))
-
-            raise ServerError('Invalid password')
-    except ServerError as e:
-        error = str(e)
-
-    return 'logado'
-
+                    session['nome'] = request.form['nome']
+                    return 'logado'
+                else:
+                    error = "Senha invalida"
+        else:
+            error = "Usuario invalido"
+    return 'erro ao logar'
 
 
 
