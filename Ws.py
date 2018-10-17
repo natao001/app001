@@ -11,9 +11,7 @@ def hello():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    error = None
-    if 'nome' in session:
-        return 'logado'
+      
     if request.method == 'POST':
         username_form  = request.form['nome']
         password_form  = request.form['senha']
