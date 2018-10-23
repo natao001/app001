@@ -1,5 +1,5 @@
 import psycopg2
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request,session
 
 conn = psycopg2.connect("dbname=db43updaq6p2cl user=vyhcdlbkyrbwsw password=6c6fb5267b710dd9d6fe218d6abd72aa7c7704dd809579ffddac152aa2aa6261 host=ec2-54-235-86-226.compute-1.amazonaws.com " )
 cur = conn.cursor()
@@ -11,34 +11,36 @@ def hello():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-      
     if request.method == 'POST':
-        username_form  = request.form['nome']
-        password_form  = request.form['senha']
-        cur.execute("SELECT COUNT(1) FROM usuario WHERE nome = %s;", [username_form]) # CHECKS IF USERNAME EXSIST
+        nome  = request.form.get('nomeUsuario')
+        print("nome: ", nome)
+        senha  = request.form.get('senha')
+        print("senha: ", senha)
+        cur.execute("SELECT COUNT(1) FROM usuario WHERE nome = '%s';"% nome) # CHECKS IF USERNAME EXSIST
         if cur.fetchone()[0]:
-            cur.execute("SELECT senha FROM usuario WHERE nome = %s;", [username_form]) # FETCH THE HASHED PASSWORD
+            cur.execute("SELECT senha FROM usuario WHERE nome = '%s';"% nome) # FETCH THE HASHED PASSWORD
             for row in cur.fetchall():
-                if md5(password_form).hexdigest() == row[0]:
-                    session['nome'] = request.form['nome']
-                    return 'logado'
+                if senha == row[0]:
+                    return jsonify({'resultado':'logado'})
                 else:
                     error = "Senha invalida"
         else:
             error = "Usuario invalido"
-    return 'erro ao logar'
+    return jsonify({'resultado':error})
 
 
 
 @app.route('/contacts')
 def contacts():
     try:
-        cur.execute("""SELECT nome from usuario""")
+        nomeUsuario ='NADSON'
+        cur.execute("SELECT senha FROM usuario WHERE nome ='%s'"% nomeUsuario)
         rows = cur.fetchall()
-        response = ''
+       
         my_list = []
         for row in rows:
             my_list.append(row[0])
+            print(my_list)
 
         return jsonify(results=my_list)
     except Exception as e:
