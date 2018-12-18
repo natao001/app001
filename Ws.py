@@ -12,8 +12,8 @@ def hello():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        nome  = request.form.get('nomeUsuario')
-        senha  = request.form.get('senha')
+        nome  = request.json['nomeUsuario']
+        senha  = request.json['senha']
         cur.execute("SELECT COUNT(1) FROM usuario WHERE nome = '%s';"% nome) # CHECKS IF USERNAME EXSIST
         if cur.fetchone()[0]:
             cur.execute("SELECT senha FROM usuario WHERE nome = '%s';"% nome) # FETCH THE HASHED PASSWORD
