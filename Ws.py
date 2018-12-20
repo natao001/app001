@@ -24,7 +24,7 @@ def login():
                     error = "Senha invalida"
         else:
             error = "Usuario invalido"
-    return jsonify({'erro':error})
+    return jsonify({'resultado':error})
 
 
 
