@@ -5,7 +5,7 @@ from flask import Flask, render_template, jsonify, request,session
 conn = psycopg2.connect("dbname=db43updaq6p2cl user=vyhcdlbkyrbwsw password=6c6fb5267b710dd9d6fe218d6abd72aa7c7704dd809579ffddac152aa2aa6261 host=ec2-54-235-86-226.compute-1.amazonaws.com " )
 cur = conn.cursor()
 app = Flask(__name__)
-CORS(app)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/')
 def hello():
